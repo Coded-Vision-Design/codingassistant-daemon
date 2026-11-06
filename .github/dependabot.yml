@@ -1,0 +1,25 @@
+# Auto-seeded by cdv-vps-ops/scripts/seed-dependabot-config.ps1.
+# Tune freely - this file will not be overwritten on subsequent runs.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      transitive-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      patch-and-minor:
+        applies-to: version-updates
+        update-types: ["patch", "minor"]
