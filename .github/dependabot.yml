@@ -1,11 +1,30 @@
-# Auto-seeded by cdv-vps-ops/scripts/seed-dependabot-config.ps1.
-# Tune freely - this file will not be overwritten on subsequent runs.
+# Org-default Dependabot config (v2, Nov 2026).
+# Seeded by cdv-vps-ops: scripts/seed-dependabot-config.ps1 and
+# scripts/auto-onboard.ps1 both render this file through
+# scripts/lib/dependabot-config.ps1, which keeps the github-actions block plus
+# only the ecosystem blocks whose manifest exists at the repo root.
+#
+# Policy:
+#   - Security updates open as soon as an advisory lands (the schedule and the
+#     cooldown do not apply to them), grouped into one PR per ecosystem.
+#     dependabot-auto-merge.yml merges them at any semver level once `verify`
+#     passes.
+#   - Patch and minor version updates: one grouped PR per ecosystem, monthly.
+#   - Major version updates: one PR each in the same monthly run (a failing
+#     major never blocks the others), after a 7-day cooldown. Dev-dependency
+#     and GitHub Actions majors auto-merge on a green `verify`; runtime majors
+#     are picked up the same day by the VPS dependabot bot
+#     (cdv-vps-ops/services/dependabot-bot).
+#
+# Tune freely per repo. Repos whose file no longer carries the seeded marker
+# below are treated as hand-tuned and never overwritten.
+# cvd-seeded-dependabot: v2
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     open-pull-requests-limit: 5
     groups:
       actions:
@@ -14,8 +33,11 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     open-pull-requests-limit: 10
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
     groups:
       transitive-security:
         applies-to: security-updates
