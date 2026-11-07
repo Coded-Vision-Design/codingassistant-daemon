@@ -1,0 +1,19 @@
+# Per-repo caller for the org-level reusable issue-triage workflow.
+# Deployed to every active CVD repo by scripts/install-triage-claude.ps1
+# in cdv-vps-ops.
+name: Issue triage
+
+on:
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  issues: read
+  contents: read
+
+jobs:
+  triage:
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-issue-triage.yml@main
+    secrets:
+      DISCORD_ISSUE_TRIAGE_WEBHOOK: ${{ secrets.DISCORD_ISSUE_TRIAGE_WEBHOOK }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
